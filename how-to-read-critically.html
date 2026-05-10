@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Read Critically — Read for meaning, perspective, and truth</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07090f;
+  --surface: rgba(255,255,255,0.04);
+  --surface-hover: rgba(255,255,255,0.08);
+  --border: rgba(255,255,255,0.08);
+  --border-bright: rgba(255,255,255,0.18);
+  --text: #e8eaf0;
+  --text-dim: #8892a4;
+  --text-dimmer: #4a5568;
+  --accent1: #6eb8c8; /* teal — Active Decoder */
+  --accent2: #8eaee0; /* periwinkle — Questioning Reader */
+  --accent3: #9ec878; /* sage — Analytical Thinker */
+  --accent4: #c8a06e; /* amber — Critical Evaluator */
+  --accent5: #c87eb8; /* violet — Scholarly Reader */
+  --glow1: rgba(110,184,200,0.15);
+  --glow2: rgba(142,174,224,0.15);
+  --glow3: rgba(158,200,120,0.15);
+  --glow4: rgba(200,160,110,0.15);
+  --glow5: rgba(200,126,184,0.15);
+  --sc: var(--accent1);
+  --sg: var(--glow1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+
+#canvas-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.5; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 1.1rem 2rem;
+  background: rgba(7,9,15,0.88); backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.nav-brand { font-family: 'DM Mono', monospace; font-size: 0.78rem; letter-spacing: 0.15em; color: var(--accent3); text-transform: uppercase; }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; color: var(--text-dim); text-decoration: none; text-transform: uppercase; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+.nav-toggle { display: none; background: none; border: none; color: var(--text); font-size: 1.25rem; cursor: pointer; }
+
+/* ── STAGE SWITCHER ── */
+.stage-switcher {
+  position: fixed; top: 56px; left: 0; right: 0; z-index: 90;
+  background: rgba(7,9,15,0.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex; overflow-x: auto; scrollbar-width: none;
+  padding: 0 1.5rem;
+}
+.stage-switcher::-webkit-scrollbar { display: none; }
+.stage-btn {
+  flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 0.6rem 1.4rem; gap: 0.15rem;
+  border: none; background: transparent; cursor: pointer;
+  border-bottom: 2px solid transparent; color: var(--text-dimmer);
+  transition: all 0.22s; min-width: 130px;
+}
+.stage-btn:hover { color: var(--text-dim); }
+.stage-btn.active { color: var(--sc); border-bottom-color: var(--sc); }
+.stage-btn .sn { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.15em; text-transform: uppercase; }
+.stage-btn .st { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 600; line-height: 1.1; font-style: italic; }
+.stage-btn .sg { font-family: 'DM Mono', monospace; font-size: 0.54rem; letter-spacing: 0.08em; color: var(--text-dimmer); }
+
+.stage-btn[data-s="1"].active { color: var(--accent1); border-bottom-color: var(--accent1); }
+.stage-btn[data-s="2"].active { color: var(--accent2); border-bottom-color: var(--accent2); }
+.stage-btn[data-s="3"].active { color: var(--accent3); border-bottom-color: var(--accent3); }
+.stage-btn[data-s="4"].active { color: var(--accent4); border-bottom-color: var(--accent4); }
+.stage-btn[data-s="5"].active { color: var(--accent5); border-bottom-color: var(--accent5); }
+
+/* ── LAYOUT ── */
+.container { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+section { padding: 5.5rem 0; position: relative; z-index: 1; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  justify-content: center; align-items: flex-start;
+  padding: 9rem 0 4rem;
+}
+.hero-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent3); margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.8s ease 0.2s forwards; }
+.hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 700; line-height: 1.08; letter-spacing: -0.02em; margin-bottom: 1.25rem; max-width: 18ch; opacity: 0; animation: fadeUp 0.9s ease 0.35s forwards; }
+.hero h1 em { font-style: italic; color: var(--accent3); }
+.hero-subtitle { font-size: 1.05rem; color: var(--text-dim); max-width: 50ch; margin-bottom: 2rem; font-weight: 300; opacity: 0; animation: fadeUp 0.9s ease 0.5s forwards; }
+.hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.9s ease 0.65s forwards; margin-bottom: 2.5rem; }
+
+.principle-box {
+  opacity: 0; animation: fadeUp 0.9s ease 0.8s forwards;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--accent3);
+  border-radius: 6px; padding: 1.5rem 1.75rem; max-width: 560px;
+}
+.principle-label { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent3); margin-bottom: 0.65rem; }
+.principle-quote { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-style: italic; line-height: 1.6; color: var(--text); }
+
+/* ── BUTTONS ── */
+.btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.75rem; border-radius: 3px; font-family: 'DM Mono', monospace; font-size: 0.78rem; letter-spacing: 0.1em; text-decoration: none; cursor: pointer; border: none; transition: all 0.2s; }
+.btn-primary { background: var(--accent3); color: var(--bg); font-weight: 500; }
+.btn-primary:hover { filter: brightness(1.12); transform: translateY(-1px); }
+.btn-ghost { background: transparent; color: var(--text-dim); border: 1px solid var(--border-bright); }
+.btn-ghost:hover { color: var(--text); border-color: var(--accent1); }
+
+/* ── SECTION HEADERS ── */
+.section-label { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent3); margin-bottom: 0.75rem; }
+.section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; line-height: 1.15; margin-bottom: 0.75rem; }
+.section-intro { color: var(--text-dim); max-width: 58ch; font-size: 0.95rem; font-weight: 300; margin-bottom: 3rem; }
+
+/* ── ASCENT SPINE ── */
+.ascent-wrapper { display: grid; grid-template-columns: 60px 1fr; gap: 0 2rem; max-width: 900px; }
+.ascent-spine { display: flex; flex-direction: column; align-items: center; }
+.spine-line { width: 1px; flex: 1; min-height: 2rem; }
+.spine-line-1 { background: linear-gradient(to bottom, transparent, var(--accent1)); }
+.spine-line-2 { background: linear-gradient(to bottom, var(--accent1), var(--accent2)); }
+.spine-line-3 { background: linear-gradient(to bottom, var(--accent2), var(--accent3)); }
+.spine-line-4 { background: linear-gradient(to bottom, var(--accent3), var(--accent4)); }
+.spine-line-5 { background: linear-gradient(to bottom, var(--accent4), var(--accent5)); }
+.spine-line-end { background: linear-gradient(to bottom, var(--accent5), transparent); }
+
+.spine-node { width: 14px; height: 14px; border-radius: 50%; border: 2px solid; background: var(--bg); flex-shrink: 0; transition: all 0.3s; cursor: pointer; }
+.spine-node.lit { box-shadow: 0 0 12px; }
+.s1c .spine-node { border-color: var(--accent1); }
+.s1c .spine-node.lit { background: var(--accent1); box-shadow: 0 0 12px var(--accent1); }
+.s2c .spine-node { border-color: var(--accent2); }
+.s2c .spine-node.lit { background: var(--accent2); box-shadow: 0 0 12px var(--accent2); }
+.s3c .spine-node { border-color: var(--accent3); }
+.s3c .spine-node.lit { background: var(--accent3); box-shadow: 0 0 12px var(--accent3); }
+.s4c .spine-node { border-color: var(--accent4); }
+.s4c .spine-node.lit { background: var(--accent4); box-shadow: 0 0 12px var(--accent4); }
+.s5c .spine-node { border-color: var(--accent5); }
+.s5c .spine-node.lit { background: var(--accent5); box-shadow: 0 0 12px var(--accent5); }
+
+.s1c { --sc: var(--accent1); --sg: var(--glow1); }
+.s2c { --sc: var(--accent2); --sg: var(--glow2); }
+.s3c { --sc: var(--accent3); --sg: var(--glow3); }
+.s4c { --sc: var(--accent4); --sg: var(--glow4); }
+.s5c { --sc: var(--accent5); --sg: var(--glow5); }
+
+/* ── STAGE CARDS ── */
+.stage-item { margin-bottom: 3rem; }
+.stage-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+  padding: 2rem 2.25rem; cursor: pointer; transition: all 0.3s ease;
+  position: relative; overflow: hidden;
+}
+.stage-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--sc); opacity: 0; transition: opacity 0.3s; }
+.stage-card:hover { background: var(--surface-hover); border-color: var(--border-bright); transform: translateX(4px); }
+.stage-card.active { border-color: var(--border-bright); transform: translateX(4px); box-shadow: 0 0 30px var(--sg); }
+.stage-card.active::before { opacity: 1; }
+.stage-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
+.stage-num { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.15em; color: var(--text-dimmer); text-transform: uppercase; }
+.stage-badge { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; padding: 0.2rem 0.65rem; border-radius: 2px; text-transform: uppercase; background: var(--sg); color: var(--sc); border: 1px solid var(--sc); }
+.stage-title-el { font-family: 'Playfair Display', serif; font-size: 1.45rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--sc); }
+.stage-meta { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text-dimmer); margin-bottom: 0.75rem; letter-spacing: 0.05em; }
+.stage-desc { color: var(--text-dim); font-size: 0.88rem; line-height: 1.6; margin-bottom: 0.85rem; }
+.stage-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.skill-tag { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.08em; padding: 0.18rem 0.55rem; border-radius: 2px; border: 1px solid var(--border); color: var(--text-dimmer); text-transform: uppercase; }
+.stage-expand { display: none; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+.stage-card.active .stage-expand { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 1rem; }
+.expand-item { background: rgba(255,255,255,0.03); border-radius: 4px; padding: 1rem; border: 1px solid var(--border); }
+.expand-item h4 { font-family: 'DM Mono', monospace; font-size: 0.63rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dimmer); margin-bottom: 0.45rem; }
+.expand-item p { font-size: 0.84rem; color: var(--text-dim); line-height: 1.5; }
+
+/* ── SKILL CARDS ── */
+.skills-section { background: rgba(255,255,255,0.012); }
+.skills-tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 2.5rem; }
+.tab-btn { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.45rem 1rem; border-radius: 3px; border: 1px solid var(--border); background: transparent; color: var(--text-dim); cursor: pointer; transition: all 0.2s; }
+.tab-btn:hover { border-color: var(--accent3); color: var(--text); }
+.tab-btn.active { background: var(--accent3); color: var(--bg); border-color: var(--accent3); font-weight: 500; }
+
+.skill-panel { display: none; }
+.skill-panel.active { display: block; }
+.skill-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 1.25rem; }
+.skill-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1.5rem; transition: all 0.2s; position: relative; overflow: hidden; }
+.skill-card:hover { border-color: var(--border-bright); background: var(--surface-hover); }
+.skill-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--sc-card, var(--accent3)); opacity: 0.5; }
+.skill-card-stage { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.3rem; }
+.skill-card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 0.45rem; font-weight: 600; }
+.skill-card p { font-size: 0.84rem; color: var(--text-dim); line-height: 1.6; }
+.skill-progression { display: flex; gap: 0.25rem; margin-top: 0.75rem; }
+.prog-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); transition: background 0.3s; }
+.prog-dot.on { background: var(--sc-card, var(--accent3)); }
+
+/* ── CHECKLIST ── */
+.checklist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+.checklist-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1.75rem; }
+.checklist-card h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 0.25rem; font-weight: 600; }
+.checklist-subtitle { font-family: 'DM Mono', monospace; font-size: 0.63rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dimmer); margin-bottom: 1.25rem; }
+.checklist-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: all 0.2s; }
+.checklist-item:last-of-type { border-bottom: none; }
+.check-box { width: 16px; height: 16px; border: 1px solid var(--border-bright); border-radius: 2px; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 0.65rem; color: transparent; }
+.checklist-item:hover .check-box { border-color: var(--accent3); }
+.checklist-item.checked .check-box { background: var(--accent3); border-color: var(--accent3); color: var(--bg); }
+.checklist-item.checked .check-text { color: var(--text-dimmer); text-decoration: line-through; }
+.check-text { font-size: 0.87rem; color: var(--text-dim); line-height: 1.5; }
+.checklist-progress { margin-top: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+.progress-bar { flex: 1; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--accent3); border-radius: 2px; transition: width 0.4s ease; width: 0%; }
+.progress-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text-dimmer); white-space: nowrap; }
+
+/* ── RUBRIC ── */
+.rubric-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 2rem; }
+.rubric-table th { font-family: 'DM Mono', monospace; font-size: 0.63rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dimmer); text-align: left; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-bright); background: rgba(255,255,255,0.02); }
+.rubric-table td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--border); color: var(--text-dim); vertical-align: top; line-height: 1.5; }
+.rubric-table tr:hover td { background: rgba(255,255,255,0.02); }
+.rubric-table td:first-child { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--text); font-weight: 600; white-space: nowrap; }
+.rubric-select { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.rubric-btn { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.35rem 0.85rem; border-radius: 2px; border: 1px solid var(--border); background: transparent; color: var(--text-dim); cursor: pointer; transition: all 0.2s; }
+.rubric-btn.active { background: var(--accent2); color: var(--bg); border-color: var(--accent2); }
+.rubric-overflow { overflow-x: auto; }
+
+/* ── PHRASES ── */
+.phrases-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.25rem; }
+.phrase-group { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1.5rem; }
+.phrase-group h3 { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent3); margin-bottom: 1rem; }
+.phrase-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.45rem 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: all 0.2s; }
+.phrase-item:last-child { border-bottom: none; }
+.phrase-text { font-size: 0.87rem; color: var(--text-dim); font-style: italic; line-height: 1.5; flex: 1; }
+.phrase-copy { font-size: 0.65rem; opacity: 0; color: var(--accent3); transition: opacity 0.2s; flex-shrink: 0; font-family: 'DM Mono', monospace; letter-spacing: 0.05em; }
+.phrase-item:hover .phrase-copy { opacity: 1; }
+.phrase-item:hover .phrase-text { color: var(--text); }
+.phrase-item.copied .phrase-copy { color: var(--accent1); opacity: 1; }
+
+/* ── ACTIVITIES ── */
+.activities-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.25rem; }
+.activity-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1.5rem; transition: all 0.25s; cursor: pointer; }
+.activity-card:hover { background: var(--surface-hover); border-color: var(--border-bright); transform: translateY(-2px); }
+.activity-type { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent2); margin-bottom: 0.35rem; }
+.activity-card h3 { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 600; margin-bottom: 0.45rem; }
+.activity-card p { font-size: 0.84rem; color: var(--text-dim); line-height: 1.55; margin-bottom: 0.85rem; }
+.activity-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.activity-tag { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.08em; padding: 0.15rem 0.5rem; border-radius: 2px; border: 1px solid var(--border); color: var(--text-dimmer); text-transform: uppercase; }
+
+/* ── TIMER ── */
+.timer-layout { display: grid; grid-template-columns: auto 1fr; gap: 2.5rem; align-items: start; }
+.timer-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1.75rem; display: flex; flex-direction: column; align-items: center; gap: 1rem; width: 230px; }
+.timer-arc { position: relative; }
+.arc-svg { transform: rotate(-90deg); }
+.arc-bg { fill: none; stroke: var(--border); stroke-width: 3; }
+.arc-prog { fill: none; stroke: var(--accent3); stroke-width: 3; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
+.timer-display { font-family: 'DM Mono', monospace; font-size: 2.4rem; letter-spacing: 0.06em; color: var(--accent3); line-height: 1; }
+.timer-label-el { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dimmer); }
+.timer-presets { display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; }
+.t-preset { font-family: 'DM Mono', monospace; font-size: 0.63rem; padding: 0.3rem 0.65rem; border: 1px solid var(--border); border-radius: 2px; background: transparent; color: var(--text-dimmer); cursor: pointer; letter-spacing: 0.06em; text-transform: uppercase; transition: all 0.2s; }
+.t-preset:hover { border-color: var(--border-bright); color: var(--text-dim); }
+.t-preset.sel { background: var(--accent3); border-color: var(--accent3); color: var(--bg); }
+.timer-btns { display: flex; gap: 0.5rem; }
+.t-btn { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.5rem 1.1rem; border-radius: 3px; border: none; cursor: pointer; transition: all 0.2s; }
+.t-start { background: var(--accent3); color: var(--bg); }
+.t-start:hover { filter: brightness(1.12); }
+.t-reset { background: transparent; border: 1px solid var(--border); color: var(--text-dimmer); }
+.t-reset:hover { border-color: var(--border-bright); color: var(--text-dim); }
+.timer-activities { flex: 1; }
+
+/* ── MODAL ── */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(7,9,15,0.92); z-index: 200; align-items: center; justify-content: center; padding: 2rem; backdrop-filter: blur(6px); }
+.modal-overlay.open { display: flex; }
+.modal { background: #0f1320; border: 1px solid var(--border-bright); border-radius: 8px; max-width: 580px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 2.25rem; position: relative; animation: slideUp 0.28s ease; }
+.modal-close { position: absolute; top: 1.1rem; right: 1.1rem; background: none; border: 1px solid var(--border); color: var(--text-dim); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.modal-close:hover { border-color: var(--accent5); color: var(--accent5); }
+.modal-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.63rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent2); margin-bottom: 0.4rem; }
+.modal h2 { font-family: 'Playfair Display', serif; font-size: 1.55rem; margin-bottom: 1.25rem; }
+.modal-body { color: var(--text-dim); font-size: 0.88rem; line-height: 1.7; }
+.modal-body p { margin-bottom: 0.8rem; }
+.modal-body p:last-child { margin: 0; }
+.modal-body ol, .modal-body ul { margin: 0.5rem 0 0.8rem 1.15rem; display: flex; flex-direction: column; gap: 0.35rem; }
+.modal-body strong { color: var(--text); font-weight: 500; }
+
+/* ── TOAST ── */
+.toast { position: fixed; bottom: 1.75rem; right: 1.75rem; z-index: 300; background: var(--accent1); color: var(--bg); font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em; padding: 0.5rem 1rem; border-radius: 3px; opacity: 0; transform: translateY(6px); transition: all 0.22s; pointer-events: none; }
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* ── FOOTER ── */
+footer { border-top: 1px solid var(--border); padding: 2.5rem 0; text-align: center; position: relative; z-index: 1; }
+footer p { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; color: var(--text-dimmer); }
+.footer-brand { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--text-dim); margin-bottom: 0.4rem; font-style: italic; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.reveal { opacity: 0; transform: translateY(22px); transition: all 0.65s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── DIVIDER ── */
+.rule { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav-toggle { display: flex; }
+  .nav-links.open { display: flex; position: fixed; top: 56px; left: 0; right: 0; flex-direction: column; gap: 0; background: rgba(7,9,15,0.97); border-bottom: 1px solid var(--border); padding: 1rem 0; }
+  .nav-links.open a { padding: 0.75rem 2rem; display: block; }
+  .timer-layout { grid-template-columns: 1fr; }
+  .timer-panel { width: 100%; }
+  .ascent-wrapper { grid-template-columns: 32px 1fr; gap: 0 1rem; }
+  .hero { padding-top: 10rem; }
+}
+@media (max-width: 580px) {
+  .skill-card-grid, .checklist-grid, .phrases-grid, .activities-grid { grid-template-columns: 1fr; }
+}
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<canvas id="canvas-bg"></canvas>
+
+<nav>
+  <div class="nav-brand">How to Read Critically</div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#framework">Framework</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#checklist">Checklist</a></li>
+    <li><a href="#rubric">Rubric</a></li>
+    <li><a href="#phrases">Phrases</a></li>
+    <li><a href="#practice">Practice</a></li>
+  </ul>
+  <button class="nav-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button>
+</nav>
+
+<div class="stage-switcher" id="stageSwitcher">
+  <button class="stage-btn active" data-s="1" onclick="setStage(1)"><span class="sn">Stage 1</span><span class="st">Active Decoder</span><span class="sg">Primary</span></button>
+  <button class="stage-btn" data-s="2" onclick="setStage(2)"><span class="sn">Stage 2</span><span class="st">Questioning Reader</span><span class="sg">Upper Primary</span></button>
+  <button class="stage-btn" data-s="3" onclick="setStage(3)"><span class="sn">Stage 3</span><span class="st">Analytical Thinker</span><span class="sg">Lower Secondary</span></button>
+  <button class="stage-btn" data-s="4" onclick="setStage(4)"><span class="sn">Stage 4</span><span class="st">Critical Evaluator</span><span class="sg">Upper Secondary</span></button>
+  <button class="stage-btn" data-s="5" onclick="setStage(5)"><span class="sn">Stage 5</span><span class="st">Scholarly Reader</span><span class="sg">Graduation+</span></button>
+</div>
+
+<main>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow" id="heroEyebrow">Stage 1 · Active Decoder · Primary</div>
+    <h1>How to Read <em>Critically</em></h1>
+    <p class="hero-subtitle" id="heroSub">Read not just for information, but for meaning, perspective, and truth.</p>
+    <div class="hero-cta">
+      <a href="#framework" class="btn btn-primary">Explore the framework →</a>
+      <a href="#checklist" class="btn btn-ghost">Jump to checklist</a>
+    </div>
+    <div class="principle-box">
+      <div class="principle-label">Core principle</div>
+      <div class="principle-quote" id="heroPrinciple">"Every text has a purpose. The critical reader's first task is to find it."</div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- FRAMEWORK -->
+<section id="framework">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">The Framework</div>
+      <h2 class="section-title">Five stages of mastery</h2>
+      <p class="section-intro" id="frameworkIntro">The same disciplines are revisited each year at increasing sophistication. Click any stage to expand it.</p>
+    </div>
+    <div class="ascent-wrapper reveal">
+      <div class="ascent-spine">
+        <div class="spine-line spine-line-1" style="height:2rem"></div>
+        <div class="s1c"><div class="spine-node" id="sn0" onclick="toggleStageCard(0)"></div></div>
+        <div class="spine-line spine-line-2"></div>
+        <div class="s2c"><div class="spine-node" id="sn1" onclick="toggleStageCard(1)"></div></div>
+        <div class="spine-line spine-line-3"></div>
+        <div class="s3c"><div class="spine-node" id="sn2" onclick="toggleStageCard(2)"></div></div>
+        <div class="spine-line spine-line-4"></div>
+        <div class="s4c"><div class="spine-node" id="sn3" onclick="toggleStageCard(3)"></div></div>
+        <div class="spine-line spine-line-5"></div>
+        <div class="s5c"><div class="spine-node" id="sn4" onclick="toggleStageCard(4)"></div></div>
+        <div class="spine-line spine-line-end" style="height:2rem"></div>
+      </div>
+      <div id="stageCardList"></div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- SKILLS -->
+<section id="skills" class="skills-section">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Core Disciplines</div>
+      <h2 class="section-title">Seven reading skills</h2>
+      <p class="section-intro">Each skill is practised at every stage. Select one to see how it develops across the five stages.</p>
+    </div>
+    <div class="skills-tabs reveal" id="skillTabs">
+      <button class="tab-btn active" onclick="switchSkill('main',this)">Main Idea</button>
+      <button class="tab-btn" onclick="switchSkill('argument',this)">Argument</button>
+      <button class="tab-btn" onclick="switchSkill('evidence',this)">Evidence</button>
+      <button class="tab-btn" onclick="switchSkill('tone',this)">Tone &amp; Voice</button>
+      <button class="tab-btn" onclick="switchSkill('bias',this)">Bias &amp; Perspective</button>
+      <button class="tab-btn" onclick="switchSkill('inference',this)">Inference</button>
+      <button class="tab-btn" onclick="switchSkill('synthesis',this)">Synthesis</button>
+    </div>
+    <div id="skillPanels" class="reveal"></div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- CHECKLIST -->
+<section id="checklist">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Before You Move On</div>
+      <h2 class="section-title">Reading checklist</h2>
+      <p class="section-intro" id="checklistIntro">Tick each item after finishing a text. A skipped item is a question worth returning to.</p>
+    </div>
+    <div class="checklist-grid reveal" id="checklistGrid"></div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- RUBRIC -->
+<section id="rubric" style="background:rgba(255,255,255,0.01)">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Assessment</div>
+      <h2 class="section-title">Reading rubric</h2>
+      <p class="section-intro">Use this to assess your own reading responses or give structured feedback to a peer.</p>
+    </div>
+    <div class="rubric-select reveal">
+      <button class="rubric-btn" onclick="selectRubric('s1',this)">Stage 1–2</button>
+      <button class="rubric-btn active" onclick="selectRubric('s3',this)">Stage 3</button>
+      <button class="rubric-btn" onclick="selectRubric('s5',this)">Stage 4–5</button>
+    </div>
+    <div class="rubric-overflow reveal">
+      <table class="rubric-table">
+        <thead><tr><th>Criterion</th><th>Beginning</th><th>Developing</th><th>Proficient</th><th>Excellent</th></tr></thead>
+        <tbody id="rubricBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- PHRASES -->
+<section id="phrases">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Language</div>
+      <h2 class="section-title">Useful analytical phrases</h2>
+      <p class="section-intro" id="phrasesIntro">Tap any phrase to copy it. Adapt it — don't reproduce it mechanically.</p>
+    </div>
+    <div class="phrases-grid reveal" id="phrasesGrid"></div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- PRACTICE -->
+<section id="practice">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Practice</div>
+      <h2 class="section-title">Activities &amp; reading timer</h2>
+      <p class="section-intro">Use the timer with any activity. Click an activity card for full instructions.</p>
+    </div>
+    <div class="timer-layout reveal">
+      <div>
+        <div class="section-label" style="margin-bottom:0.75rem">Reading timer</div>
+        <div class="timer-panel">
+          <div class="timer-arc">
+            <svg class="arc-svg" width="100" height="100" viewBox="0 0 100 100">
+              <circle class="arc-bg" cx="50" cy="50" r="44"/>
+              <circle class="arc-prog" id="arcProg" cx="50" cy="50" r="44" stroke-dasharray="276.46" stroke-dashoffset="0"/>
+            </svg>
+          </div>
+          <div class="timer-display" id="timerDisp">10:00</div>
+          <div class="timer-label-el" id="timerLbl">Ready</div>
+          <div class="timer-presets">
+            <button class="t-preset" onclick="setTimer(300,this)">5 min</button>
+            <button class="t-preset sel" onclick="setTimer(600,this)">10 min</button>
+            <button class="t-preset" onclick="setTimer(900,this)">15 min</button>
+            <button class="t-preset" onclick="setTimer(1200,this)">20 min</button>
+            <button class="t-preset" onclick="setTimer(1800,this)">30 min</button>
+          </div>
+          <div class="timer-btns">
+            <button class="t-btn t-start" id="timerStartBtn" onclick="timerToggle()">Start</button>
+            <button class="t-btn t-reset" onclick="timerReset()">Reset</button>
+          </div>
+        </div>
+      </div>
+      <div class="timer-activities">
+        <div class="section-label" style="margin-bottom:0.75rem">Activities</div>
+        <div class="activities-grid" id="activitiesGrid"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-brand">How to Read Critically</div>
+    <p>Read for meaning, perspective, and truth · One framework, five stages of mastery</p>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div id="modalInner"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Copied</div>
+
+<script>
+// ════════════════════════════════════════════
+// DATA
+// ════════════════════════════════════════════
+
+const HERO_DATA = {
+  1: { eyebrow: 'Stage 1 · Active Decoder · Primary', sub: 'Read not just for information, but for meaning, perspective, and truth.', principle: '"Every text has a purpose. The critical reader\'s first task is to find it."' },
+  2: { eyebrow: 'Stage 2 · Questioning Reader · Upper Primary', sub: 'Ask questions of a text. Not every answer is on the page.', principle: '"A good reader brings questions to a text. A better one leaves with new ones."' },
+  3: { eyebrow: 'Stage 3 · Analytical Thinker · Lower Secondary', sub: 'Identify arguments, examine evidence, and recognise perspective.', principle: '"To analyse is to take apart. To evaluate is to judge the pieces."' },
+  4: { eyebrow: 'Stage 4 · Critical Evaluator · Upper Secondary', sub: 'Evaluate the quality of arguments, assess bias, and weigh competing interpretations.', principle: '"The critical reader does not accept or reject — they interrogate."' },
+  5: { eyebrow: 'Stage 5 · Scholarly Reader · Graduation+', sub: 'At mastery, reading becomes a dialogue with the text, its context, and the wider conversation it joins.', principle: '"Every text is a position in an argument. The scholarly reader knows whose argument it is."' }
+};
+
+const FRAMEWORK = [
+  {
+    sClass:'s1c', num:'Stage 01', badge:'Primary', name:'Active Decoder', meta:'Ages 6–10 · Emerging Reader',
+    tags:['Main idea','Key details','Before & after reading','Predicting','Retelling'],
+    desc: { 1:'We begin reading by asking: what is this about? What is the writer trying to tell me?',2:'We are building the habit of reading with our minds as well as our eyes.',3:'The active decoder habits — attention, prediction, questioning — never leave the skilled reader.',4:'Every sophisticated analysis rests on the ability to identify what a text is actually saying.',5:'At mastery, active decoding is invisible. The reader absorbs and simultaneously interrogates.' },
+    focus: { 1:'What does this text say? What are the most important ideas?',2:'What do I know already? What am I curious about? What surprised me?',3:'Find the main idea. Track how details support it.',4:'Read actively: question, predict, confirm, revise.',5:'Active decoding is the foundation — never abandon it, however complex the text.' },
+    success: { 1:'The reader can say, in their own words, what the text is about.',2:'The reader notices when the text surprises or contradicts their expectations.',3:'The reader can identify the main idea and explain how details support it.',4:'The reader is always one step ahead of the text, anticipating and questioning.',5:'The reader leaves no part of the text unexamined.' },
+    challenge: { 1:'Read a short text. Write one sentence saying what it is about.',2:'Before reading, write two questions you hope the text will answer. After reading, check them.',3:'Find the sentence that contains the main idea. Underline every detail that supports it.',4:'Read a complex paragraph twice: once for what it says, once for what it assumes.',5:'Read a text and identify every claim the writer makes — stated and unstated.' }
+  },
+  {
+    sClass:'s2c', num:'Stage 02', badge:'Upper Primary', name:'Questioning Reader', meta:'Ages 9–12 · Developing Reader',
+    tags:['Questioning the text','Purpose','Audience','Fact vs opinion','Inference'],
+    desc: { 1:'We learn to ask questions of a text, not just collect its information.',2:'We are developing the habit of reading with curiosity and mild suspicion.',3:'Questioning becomes automatic: why is this written? who is it for? what is left out?',4:'Every sophisticated critical reading practice begins with questioning the text\'s purpose and positioning.',5:'The scholarly reader holds every text at a slight angle and examines it from there.' },
+    focus: { 1:'Why was this written? Who is it for?',2:'What is fact? What is opinion? How do I tell the difference?',3:'What does the text assume I already know or believe?',4:'What does this text not say? What has been left out, and why?',5:'Every text is written from somewhere. The question is always: from where?' },
+    success: { 1:'The reader can say what the text is for and who it is aimed at.',2:'The reader can distinguish between a fact and an opinion.',3:'The reader notices what a text assumes its audience already believes.',4:'The reader identifies the limits of a text as clearly as its content.',5:'The reader treats every text as a position, not a window.' },
+    challenge: { 1:'Choose a text. Write one sentence on why you think it was written.',2:'Find one fact and one opinion in the same text. Explain how you know the difference.',3:'Read a text and list three things the writer assumed you already knew.',4:'After reading, write a sentence on what the text did not tell you — and why that matters.',5:'Read two texts on the same topic. What does each one leave out that the other includes?' }
+  },
+  {
+    sClass:'s3c', num:'Stage 03', badge:'Lower Secondary', name:'Analytical Thinker', meta:'Ages 12–15 · Confident Reader',
+    tags:['Argument structure','Evidence','Author\'s purpose','Tone','Connotation'],
+    desc: { 1:'One day we will understand how texts are constructed to persuade, inform, or move us.',2:'We are learning to see the structure behind a text — its argument, its evidence, its technique.',3:'Analytical reading reveals how writers make their meaning: through word choice, structure, and evidence.',4:'Analysis moves beyond what a text says to how and why it says it.',5:'At mastery, analytical reading is simultaneous with reading. The structure is felt as it is encountered.' },
+    focus: { 1:'What is the writer\'s argument? What evidence do they use?',2:'How does the writer\'s language create an impression or feeling?',3:'How is the text structured? What effect does that have on the reader?',4:'How do word choice, tone, and structure work together to advance the argument?',5:'Analysis is a habit of mind, not a procedure. Apply it at every level of the text.' },
+    success: { 1:'The reader can identify a claim and the evidence used to support it.',2:'The reader notices the effect of specific word choices on the reader\'s response.',3:'The reader can explain how the structure of a text serves its purpose.',4:'The reader understands how technique, argument, and evidence interact.',5:'The reader reads for effect as instinctively as for meaning.' },
+    challenge: { 1:'Find the main argument. Find two pieces of evidence. Are they convincing?',2:'Choose five words from a text. What feeling does each one create? Could the writer have chosen differently?',3:'Draw the structure of a text: where does it begin, develop, and turn? Why there?',4:'Rewrite a paragraph using a different tone. What changes? What is lost?',5:'Choose a text and write a full analytical commentary: argument, structure, language, effect.' }
+  },
+  {
+    sClass:'s4c', num:'Stage 04', badge:'Upper Secondary', name:'Critical Evaluator', meta:'Ages 15–18 · Articulate Reader',
+    tags:['Evaluating evidence','Recognising bias','Logical fallacies','Counter-readings','Reliability'],
+    desc: { 1:'We will learn to judge not just what a text says, but how well it says it — and whether it earns belief.',2:'We are developing the ability to assess the quality of reasoning, the reliability of evidence, and the presence of bias.',3:'Critical evaluation asks: is this argument sound? Is the evidence strong? Is the writer\'s perspective limiting what they can see?',4:'No text is neutral. Every text is written from a position. Evaluation requires knowing what that position is.',5:'At mastery, evaluation is not a separate stage of reading. It is reading.' },
+    focus: { 1:'Does the evidence actually support the claim? Is it strong enough?',2:'What assumptions does the writer make? Are they stated or hidden?',3:'Where does the writer\'s perspective help their argument? Where does it limit it?',4:'What counter-arguments does the text ignore, and why does that matter?',5:'Evaluate not just arguments but the standards by which the writer judges their own evidence.' },
+    success: { 1:'The reader can assess whether evidence is adequate to the claim it supports.',2:'The reader identifies unstated assumptions and asks whether they are sound.',3:'The reader recognises when a writer\'s position limits what they can see.',4:'The reader identifies what a text would have to acknowledge to be fully convincing.',5:'The reader evaluates with precision: not just "biased" but how, where, and with what consequences.' },
+    challenge: { 1:'Find a claim and its evidence. Is the evidence sufficient? What else would you need?',2:'Write down three assumptions the writer makes. Are they stated? Are they defensible?',3:'Identify the writer\'s perspective. Name one thing it allows them to see and one thing it prevents them from seeing.',4:'Write the strongest counter-argument to the text\'s central claim. Does the text address it?',5:'Write a critical evaluation of a full text: claim, evidence, assumptions, bias, counter-argument.' }
+  },
+  {
+    sClass:'s5c', num:'Stage 05', badge:'Graduation+', name:'Scholarly Reader', meta:'Age 18+ · Mastery Level',
+    tags:['Intertextuality','Contextual reading','Ideological critique','Discourse analysis','Scholarly synthesis'],
+    desc: { 1:'One day, all of this will feel natural. Every great reader started at Stage 1.',2:'This is the goal — every skill practised at earlier stages is building towards this.',3:'All seven disciplines integrate into reading that is simultaneously comprehending, analysing, and evaluating.',4:'At mastery, reading is a conversation: between reader and text, text and context, and text and the wider discourse it inhabits.',5:'The scholarly reader does not consume a text. They interrogate it, historicise it, and situate it in the conversations it joins and the silences it maintains.' },
+    focus: { 1:'Keep going.',2:'Every habit you are forming now is building towards this.',3:'Reading any text as if it is in conversation with every other text on its topic.',4:'No text exists alone. Where does this text stand in relation to the debate it enters?',5:'The gap between what a text says, what it means, and what it does in the world.' },
+    success: { 1:'You read something. You will read something more carefully next time.',2:'You can see how the skills connect to one another.',3:'Every reading response goes beyond comprehension to analysis and evaluation.',4:'The reader locates the text in its intellectual, historical, and ideological context.',5:'A reader encounters the text\'s positions, silences, assumptions, and consequences — and can account for all of them.' },
+    challenge: { 1:'Read something. Anything. Ask one question of it.',2:'Review notes from Stage 1 or 2. What do you now see that you missed?',3:'Read a text and write: what it says, how it says it, and why it matters.',4:'Read two texts in dialogue. Where do they agree? Where do they talk past each other? Why?',5:'Read a canonical text in its field. Write a response that situates it, interrogates it, and advances beyond it.' }
+  }
+];
+
+const SKILLS = {
+  main: { label: 'Main Idea', cards: [
+    { title: 'Identifying the topic', bodies: ['Point at the text. Ask: what is this about?','Find the sentence that says what the whole text is about.','Distinguish topic from main idea: the topic is what it is about; the main idea is what it says about that topic.','Practise articulating the main idea in one sentence, without looking at the text.','In complex texts, there is often a primary claim and a network of subsidiary claims. Map them.'] },
+    { title: 'Key details', bodies: ['Find one fact. Find one example.','List the three most important details. Could you explain the text without them?','Details serve the main idea. Ask: how does this detail support the central claim?','Evaluate detail: is it representative, or has it been selected for effect?','In scholarly texts, details are never innocent. Ask why this example, this statistic, this case — and not another.'] },
+    { title: 'Summarising', bodies: ['Say what happened in two sentences.','Write a summary without looking at the text.','A good summary captures the main idea and the key supporting points — in the fewest possible words.','Practise compressing without distorting. What is lost in summarising? What must always be preserved?','The test of a summary is whether a reader could reconstruct the text\'s essential argument from it alone.'] }
+  ]},
+  argument: { label: 'Argument', cards: [
+    { title: 'Claim and support', bodies: ['Find one thing the writer says is true.','Find a sentence that makes a claim. Find the sentence that supports it.','A claim is an assertion. Support is the evidence or reasoning offered for it.','Identify the difference between a strong, supported claim and an assertion presented as fact.','In sophisticated texts, claims and support are interwoven. Unravel them deliberately.'] },
+    { title: 'Argument structure', bodies: ['Does this text try to convince me of something?','What is the main argument? What are the steps in the reasoning?','Map the structure of an argument: premise → reasoning → conclusion.','Identify where the argument is strongest and where it is most vulnerable.','A complex argument anticipates objections. Note where the writer does — and where they should but don\'t.'] },
+    { title: 'Logical reasoning', bodies: ['Does the reason given actually explain the conclusion?','Find a place where the writer jumps from evidence to conclusion. Is the jump justified?','Identify common reasoning patterns: cause and effect, generalisation, analogy, authority.','Test each step in the argument. Does it follow from the one before?','Identify logical fallacies: false cause, appeal to authority, false dichotomy, straw man. Name them precisely.'] }
+  ]},
+  evidence: { label: 'Evidence', cards: [
+    { title: 'Recognising evidence', bodies: ['Find a fact. Find an example.','Identify evidence in the text: statistics, quotations, examples, expert opinion.','Distinguish between primary and secondary evidence. Know the difference.','Ask: where did this evidence come from? How was it collected? By whom?','Evaluate the provenance of evidence: source, date, methodology, and potential interest.'] },
+    { title: 'Assessing quality', bodies: ['Is the example given a good one, or a convenient one?','Ask: is there enough evidence? Is it the right kind?','Evidence must be sufficient, relevant, and representative. Check each quality separately.','One example does not prove a pattern. Ask: is this typical, or exceptional?','In scholarly reading, evaluate the methodology behind the evidence as rigorously as the evidence itself.'] },
+    { title: 'Evidence and claims', bodies: ['Does this fact actually prove what the writer says it proves?','Find a claim. Find its evidence. Ask: does the evidence actually support the claim?','Note the gap between evidence and interpretation. The writer bridges it with reasoning. Examine the bridge.','Strong evidence leaves little interpretive work to do. Weak evidence requires the writer to do too much.','In evaluating evidence, ask: what would the writer need to show to make this claim fully convincing?'] }
+  ]},
+  tone: { label: 'Tone & Voice', cards: [
+    { title: 'Identifying tone', bodies: ['Does this text feel friendly, serious, or something else?','Find words that tell you how the writer feels about their subject.','Tone is created through word choice, sentence rhythm, and what is included or omitted.','Distinguish tone from content. The same information can be delivered in many tones. What does this one signal?','In scholarly texts, tone is often deliberately measured. Ask: what is the writer careful not to express?'] },
+    { title: 'Connotation and word choice', bodies: ['Does this word feel positive or negative?','Find a word that could have been replaced with a neutral alternative. Why wasn\'t it?','Connotation is the emotional resonance of a word beyond its dictionary definition.','Analyse how word choice positions the reader: who is "us"? Who is "them"? Who is absent?','In critical reading, every word choice is a choice. Examine what each one does — and what it forecloses.'] },
+    { title: 'Register and audience', bodies: ['Who is this for? How do I know?','Find a word or phrase that tells you about the intended audience.','Register is the level and style of language appropriate to context and audience.','Ask: does the text speak to some readers and past others? Who is assumed? Who is excluded?','Scholarly register performs as well as communicates. Ask what the register claims about the writer\'s authority.'] }
+  ]},
+  bias: { label: 'Bias & Perspective', cards: [
+    { title: 'Whose point of view?', bodies: ['Is this text written by someone who wants something?','Find a sentence where the writer\'s opinion is visible.','Every text is written from somewhere. Identify the writer\'s position before evaluating their argument.','Perspective is not a flaw — but its limitations are. Identify what this perspective can and cannot see.','Ideological position shapes what can be said, what is silenced, and what is framed as common sense.'] },
+    { title: 'Recognising bias', bodies: ['Has any side been left out?','Find a word or phrase that reveals the writer\'s attitude.','Bias is not always dishonest. It is often structural: what a given perspective makes visible or invisible.','Distinguish explicit bias (stated opinion) from implicit bias (unstated assumptions shaping the text).','In all texts — including apparently neutral ones — ask: what is taken for granted? Whose interests does that serve?'] },
+    { title: 'Source and context', bodies: ['Who wrote this? Why? When?','Find out where the text comes from. Does that change how you read it?','Source matters: consider the publication, the author, the date, the intended audience, and the context of production.','A source is not automatically unreliable because it has a position. Evaluate the argument on its merits — then account for the position.','Context is not background. It is a constitutive dimension of meaning. Read it as closely as the text itself.'] }
+  ]},
+  inference: { label: 'Inference', cards: [
+    { title: 'Reading between the lines', bodies: ['What does this make me think, even if it isn\'t said?','Find a sentence where the writer implies something without saying it.','Inference is the process of deriving information not directly stated. It is essential to all reading.','Distinguish strong inferences (clearly warranted by the text) from weak ones (speculative or unsupported).','In literary and rhetorical texts, what is implied is often more significant than what is stated.'] },
+    { title: 'Unstated assumptions', bodies: ['What does the writer take for granted?','Find something the text assumes is true without saying so.','Assumptions are the hidden premises on which arguments rest. Identify and examine them.','Ask: if this assumption is false, does the argument collapse? How central is it?','In scholarly texts, the most revealing assumptions are often those the writer does not know they are making.'] },
+    { title: 'Implication and consequence', bodies: ['If this is true, what else must be true?','What would follow from this argument, if it is correct?','Think through the implications of a claim: what does it commit the writer to? What does it rule out?','Evaluate implications: is the writer aware of them? Do they acknowledge consequences they might prefer to avoid?','The consequences of an argument — political, ethical, practical — are part of its meaning.'] }
+  ]},
+  synthesis: { label: 'Synthesis', cards: [
+    { title: 'Connecting texts', bodies: ['Does this remind me of something else I have read?','Find one point where two texts agree and one where they disagree.','Synthesis is reading across sources and constructing a view from multiple perspectives.','Practise writing sentences that bring two sources into explicit dialogue: "Where X argues…, Y contends…"','In scholarly reading, a single text is always in implicit conversation with others. Make that conversation explicit.'] },
+    { title: 'Building a position', bodies: ['After reading several things, what do I think?','Use more than one text to support an idea.','Do not merely report what sources say. Synthesise: take a position that accounts for multiple views.','Acknowledge where sources conflict. Explain why you find one more convincing — and what hangs on the difference.','The reader who synthesises has moved from receiving to participating in the conversation the texts are having.'] },
+    { title: 'Reading for a purpose', bodies: ['Why am I reading this? What do I need from it?','Decide what you need from a text before you read it. Then read with that purpose active.','Read strategically: skim for structure, then read selectively for the arguments most relevant to your purpose.','Purposeful reading is not superficial reading. It is disciplined attention directed by a clear question.','The scholarly reader reads everything in relation to a question. The question shapes what is found.'] }
+  ]}
+};
+
+const CHECKLISTS = {
+  1: [
+    { title: 'Before I Read', sub: 'Preparation',
+      items: ['I have looked at the title and any pictures to predict what the text is about.','I have thought of one question I am curious about.','I know what kind of text this is (story, information, instructions).'] },
+    { title: 'During Reading', sub: 'Active reading',
+      items: ['I am reading one sentence at a time and thinking about what it means.','If I find a confusing word, I try to work it out from the other words around it.','I am noticing when I am surprised or confused.'] },
+    { title: 'After I Read', sub: 'Checking understanding',
+      items: ['I can say what the text was about in my own words.','I can name one important thing I learned or noticed.','I can say whether my prediction was right — and if not, what actually happened.'] }
+  ],
+  2: [
+    { title: 'Preparation', sub: 'Before reading',
+      items: ['I have thought about what I already know about this topic.','I have formed a question I want the text to answer.','I have thought about who wrote this and why.'] },
+    { title: 'Active Reading', sub: 'During reading',
+      items: ['I am marking or noting the main idea of each paragraph.','I am noting anything that surprises, confuses, or seems important.','I am asking whether each claim is a fact or an opinion.','I am noticing the words the writer uses to present their view.'] },
+    { title: 'After Reading', sub: 'Reflection',
+      items: ['I can explain the main idea in my own words.','I can identify one fact and one opinion from the text.','I have decided whether my original question was answered.','I have formed at least one new question the text raised for me.'] }
+  ],
+  3: [
+    { title: 'Before Analysing', sub: 'Setting up',
+      items: ['I have read the text once for overall understanding.','I have identified the writer\'s purpose and intended audience.','I have noted my initial response — what the text made me feel or think.'] },
+    { title: 'During Analysis', sub: 'Reading for how',
+      items: ['I have identified the main argument and the evidence used to support it.','I have noted key word choices and their effect on the reader.','I have identified the structure of the text and asked why it is arranged that way.','I have noted the tone of the text and asked what it signals about the writer\'s attitude.'] },
+    { title: 'After Analysis', sub: 'Evaluating',
+      items: ['I can explain how the text\'s language choices serve its argument.','I can identify at least one technique and explain its effect precisely.','I have asked: is the argument persuasive? Why or why not?','I have identified one thing the text does not address that it should.'] }
+  ],
+  4: [
+    { title: 'Evaluating Argument', sub: 'Before drafting a response',
+      items: ['I have identified every major claim in the text.','I have assessed whether each claim is adequately supported.','I have identified the writer\'s unstated assumptions.','I have identified the strongest counter-argument the text does not address.'] },
+    { title: 'Evaluating Evidence', sub: 'Assessing the material',
+      items: ['I have considered the source, date, and context of the evidence used.','I have asked whether the evidence is sufficient, relevant, and representative.','I have identified any gaps between the evidence and the conclusions drawn.','I have asked who benefits from this argument being accepted.'] },
+    { title: 'Final Evaluation', sub: 'Reaching a verdict',
+      items: ['I can explain the writer\'s perspective and how it shapes the argument.','I have identified at least one form of bias or limitation in the text.','I can state what the text would need to acknowledge to be fully convincing.','I have formed my own position on the text\'s central claim.'] }
+  ],
+  5: [
+    { title: 'Contextual Reading', sub: 'Before close reading',
+      items: ['I have placed the text in its intellectual and historical context.','I have identified the tradition or debate the text is in conversation with.','I have noted what assumptions the text\'s field takes for granted.','I have brought a specific question or framework to the reading.'] },
+    { title: 'Close and Critical Reading', sub: 'Reading at depth',
+      items: ['I have read for argument, evidence, assumptions, tone, and structure simultaneously.','I have identified what the text silences or marginalises, and why.','I have evaluated the quality of the reasoning, not just the content of the claims.','I have noted where ideology shapes what the text can and cannot say.'] },
+    { title: 'Synthesis and Response', sub: 'Moving beyond the text',
+      items: ['I have situated this text in relation to at least two other relevant texts.','I have identified where this text advances, challenges, or repeats the existing conversation.','I have formed a position that is not merely a response to this text but a contribution to its debate.','I could defend my reading against a careful reader who disagrees with it.'] }
+  ]
+};
+
+const RUBRICS = {
+  s1: [
+    ['Comprehension','Little understanding shown; key ideas missed.','Main idea located with some support; some confusion.','Main idea and key details identified clearly.','Main idea, key details, and their relationship all explained with precision.'],
+    ['Inference','No attempt to read beyond the stated.','Some attempt at inference; often unsupported.','Clear inferences drawn and connected to evidence in the text.','Sophisticated inferences drawn; distinctions between stated and implied maintained throughout.'],
+    ['Response','No personal engagement or question formed.','A question or response attempted; undeveloped.','A thoughtful response formed; question clearly connected to reading.','An insightful question or response that extends beyond the text.'],
+    ['Vocabulary','Key words not addressed or misunderstood.','Some attention to unfamiliar words; limited analysis.','Word meaning addressed through context and effect.','Word choice analysed for connotation, register, and effect.']
+  ],
+  s3: [
+    ['Argument','No identification of argument or claim.','Main argument identified; little analysis of how it is constructed.','Argument identified and its structure explained clearly.','Argument fully traced: claim, support, structure, and reasoning all analysed.'],
+    ['Evidence','Evidence not identified or misidentified.','Evidence noted; not evaluated for strength or relevance.','Evidence identified and its relationship to the claim explained.','Evidence evaluated for sufficiency, relevance, and provenance.'],
+    ['Language & Tone','No attention to language choices.','Some word choices noted; effect not explained.','Language choices identified and their effect on the reader explained.','Language, tone, and register analysed as integrated techniques serving the writer\'s purpose.'],
+    ['Perspective','No attention to writer\'s perspective.','Writer\'s perspective noted but not examined.','Perspective identified and its effect on the text\'s argument explored.','Perspective situated in context; its enabling and limiting effects on the argument analysed.'],
+    ['Evaluation','No evaluative judgment formed.','A judgment attempted; unsupported by textual analysis.','A reasoned evaluation of the text\'s argument or effectiveness.','A nuanced, evidence-based evaluation that acknowledges complexity and counter-argument.']
+  ],
+  s5: [
+    ['Comprehension & Analysis','Comprehension partial; no meaningful analysis.','Comprehension adequate; analysis superficial or mechanical.','Comprehension full; analysis clear and supported.','Comprehension and analysis fully integrated; the text\'s meaning, method, and purpose all accounted for.'],
+    ['Critical Evaluation','No evaluation; claims accepted or rejected without reasoning.','Some evaluation; judgment not fully justified.','Evaluation is reasoned and supported; bias and assumptions identified.','Evaluation is precise, contextualised, and intellectually rigorous; limitations of the text accounted for.'],
+    ['Contextual Reading','No attention to context.','Some context noted; not integrated into analysis.','Context informing the reading; text situated in its intellectual moment.','Text fully contextualised: historical, ideological, and intertextual dimensions all engaged.'],
+    ['Synthesis','No engagement with other texts or positions.','Reference to other texts; synthesis not achieved.','Two or more texts brought into productive dialogue.','Synthesis produces a position that advances beyond any individual source.'],
+    ['Voice & Judgement','No independent judgment formed.','A position taken; not clearly argued.','A clear, defended position that engages seriously with the text.','A scholarly voice: independent, nuanced, and capable of sustaining an argument across complexity.']
+  ]
+};
+
+const PHRASES = {
+  1: [
+    { title: 'What the text is about', phrases: ['This text is about …', 'The writer is telling us that …', 'The main idea is …', 'The most important part is …'] },
+    { title: 'What I noticed', phrases: ['I noticed that …', 'One thing that surprised me was …', 'I found it interesting that …', 'The word "…" made me think of …'] },
+    { title: 'My questions', phrases: ['I wonder why …', 'I am not sure what … means.', 'I would like to know more about …', 'After reading, I am still wondering …'] }
+  ],
+  2: [
+    { title: 'Identifying purpose', phrases: ['The writer\'s purpose is to …', 'This text is written to inform / persuade / describe …', 'The intended audience seems to be …', 'The writer wants the reader to …'] },
+    { title: 'Fact and opinion', phrases: ['This is a fact because …', 'This is an opinion because …', 'The writer uses the word "…" to show their view.', 'This could be checked because …'] },
+    { title: 'Questioning the text', phrases: ['This makes me wonder …', 'The writer does not explain …', 'I would need to know … before I could accept this.', 'Another perspective on this might be …'] }
+  ],
+  3: [
+    { title: 'Identifying argument', phrases: ['The writer argues that …', 'The central claim of this text is …', 'This is supported by …', 'The writer uses … as evidence for the claim that …'] },
+    { title: 'Analysing language', phrases: ['The word "…" suggests …', 'The writer\'s use of "…" creates an impression of …', 'This language positions the reader to …', 'The tone of this passage is … because …'] },
+    { title: 'Evaluating structure', phrases: ['The writer begins with … in order to …', 'The structure of the text suggests …', 'By placing … at the end, the writer …', 'The transition from … to … signals …'] },
+    { title: 'Forming a view', phrases: ['Overall, the text is … because …', 'The most effective aspect of the argument is …', 'A weakness in the argument is …', 'The writer would have been more convincing if …'] }
+  ],
+  4: [
+    { title: 'Evaluating argument', phrases: ['The argument is undermined by …', 'The claim that … is not adequately supported because …', 'The writer assumes, without evidence, that …', 'This would be more convincing if the writer had …'] },
+    { title: 'Identifying bias', phrases: ['The writer\'s perspective leads them to …', 'The text marginalises … by …', 'A notable omission in this text is …', 'The framing of … as … reveals that …'] },
+    { title: 'Counter-reading', phrases: ['An alternative reading of this text might argue …', 'A reader from a different position might object …', 'The text does not address the possibility that …', 'This argument would be challenged by …'] },
+    { title: 'Precise evaluation', phrases: ['The strength of this argument lies in …, but it is limited by …', 'The evidence is relevant but insufficient because …', 'The writer\'s position enables them to see … but prevents them from …', 'In order to be fully convincing, this text would need to …'] }
+  ],
+  5: [
+    { title: 'Situating the text', phrases: ['This text participates in a broader debate about …', 'Writing within the tradition of …, the author …', 'The text\'s assumptions reflect the priorities of …', 'Read against X, this text reveals …'] },
+    { title: 'Interrogating ideology', phrases: ['The naturalisaton of … as … functions ideologically to …', 'What the text cannot say — given its position — is …', 'The silence around … is as significant as …', 'By framing … as … the text forecloses the possibility of …'] },
+    { title: 'Advancing beyond the text', phrases: ['While X argues …, a more adequate account would …', 'The limits of this argument suggest the need for …', 'What this text opens but does not close is …', 'The question this argument ultimately cannot resolve is …'] },
+    { title: 'Scholarly synthesis', phrases: ['Taken together, X and Y suggest …', 'Where X and Y diverge is precisely where the problem lies: …', 'The productive tension between … and … points toward …', 'What neither X nor Y can account for is …'] }
+  ]
+};
+
+const ACTIVITIES = {
+  1: [
+    { type:'Comprehension', title:'One-Sentence Summary', body:'Read any short text. Write one sentence — and only one — that captures what the whole text is about. Revise it until it is exactly right.', tags:['main idea','summarising'], modal:'<p><strong>The task:</strong> Choose a short text — a paragraph, a page, a news story.</p><ol><li>Read it all the way through once.</li><li>Without looking at the text, write one sentence that tells someone what it is about.</li><li>Read the text again. Is your sentence accurate? Is it complete?</li><li>Revise the sentence until you are satisfied it captures the whole text — not just the beginning, not just the interesting bit, but the whole.</li></ol><p><strong>The discipline:</strong> One sentence forces you to decide what matters most. That decision is where reading begins.</p>' },
+    { type:'Vocabulary', title:'Word in Context', body:'Choose an unfamiliar word from any text. Use the words around it to work out its meaning before checking a dictionary. Then ask: what would have been lost if the writer had used a simpler word?', tags:['vocabulary','inference'], modal:'<p>Understanding words in context is more useful than knowing their definitions in isolation.</p><ol><li>Find a word you do not know.</li><li>Read the sentence again. What does the word seem to mean from context?</li><li>Check the dictionary.</li><li>Now ask: <strong>why did the writer choose this word and not a simpler one?</strong></li></ol><p>The answer to that last question is where language analysis begins.</p>' },
+    { type:'Prediction', title:'Before and After', body:'Before reading, write one sentence predicting what the text will be about. After reading, write one sentence saying how your prediction compared to what you found.', tags:['prediction','active reading'], modal:'<p>Active reading begins before you read the first word.</p><ol><li>Look at the title, any images, and the first sentence. Nothing else.</li><li>Write: <em>"I think this text will be about…"</em></li><li>Read the text.</li><li>Write: <em>"My prediction was right / wrong because…"</em></li></ol><p><strong>Being wrong is fine.</strong> The point is to arrive at the text with your mind already engaged. A reader who predicts and is wrong has still learned something about the text — and about their own expectations.</p>' }
+  ],
+  2: [
+    { type:'Questioning', title:'Three Questions', body:'Before reading, write three questions you want the text to answer. After reading, mark each one: answered, partly answered, not answered, or replaced by a better question.', tags:['questioning','active reading'], modal:'<p>Questions are the engine of critical reading.</p><ol><li>Before reading: write three genuine questions you have about the topic or text.</li><li>Read the text actively, looking for answers.</li><li>After reading, return to each question and mark it:<ul><li><strong>✓ Answered</strong> — and note where.</li><li><strong>~ Partly answered</strong> — note what is missing.</li><li><strong>✗ Not answered</strong> — ask why the text avoided it.</li><li><strong>→ Replaced</strong> — by a better question you now have.</li></ul></li></ol><p>The best outcome is not three answered questions — it is three better questions.</p>' },
+    { type:'Fact and Opinion', title:'The Highlighter Test', body:'Read a short text and mark each sentence: fact (could be checked), opinion (reflects a view), or inference (suggested but not stated). Compare results with a peer.', tags:['fact vs opinion','critical reading'], modal:'<p>The ability to distinguish fact from opinion is a foundational critical reading skill.</p><ol><li>Read the text sentence by sentence.</li><li>For each sentence, ask: <strong>could this be independently verified?</strong><ul><li>If yes: it is a <strong>fact</strong> (or at least a claim presented as fact).</li><li>If no: it is an <strong>opinion</strong>.</li><li>If it is implied but not stated: it is an <strong>inference</strong>.</li></ul></li><li>Compare your markings with someone else. Where do you disagree?</li></ol><p>Disagreement about the categories is the most instructive part of the exercise.</p>' },
+    { type:'Author\'s purpose', title:'Who Is This For?', body:'Choose any text. Write a paragraph on who you think wrote it, why they wrote it, and who they wrote it for. Use three specific details from the text as evidence.', tags:['purpose','audience'], modal:'<p>Every text is written by someone, for someone, for a reason. Knowing all three changes how you read it.</p><ol><li>Read the text once.</li><li>Write your answer to: <strong>Who wrote this?</strong> (What do you know or infer about them?)</li><li>Write your answer to: <strong>Why did they write it?</strong> (To inform? Persuade? Challenge? Sell?)</li><li>Write your answer to: <strong>Who is it for?</strong> (What does the language, tone, and content assume about the reader?)</li><li>Find <strong>three specific details</strong> in the text that support your answers. Quote them.</li></ol>' }
+  ],
+  3: [
+    { type:'Argument', title:'Claim and Evidence Map', body:'Draw a simple map of a text\'s argument: write the central claim in the middle, then draw lines to each piece of evidence the writer uses. Evaluate whether the evidence actually supports the claim.', tags:['argument','evidence'], modal:'<p>Mapping an argument makes its structure visible — and reveals its weaknesses.</p><ol><li>Read the text once for overall meaning.</li><li>Write the central claim in the centre of a blank page.</li><li>Draw a line for each major piece of evidence or supporting argument. Label each one.</li><li>Now evaluate each line: <strong>does this evidence actually support the central claim?</strong></li><li>Mark any claim that is weakly supported. Ask: what would the writer need to add?</li></ol><p>This technique works on any argumentative text, from newspaper editorials to academic essays.</p>' },
+    { type:'Language analysis', title:'Five Words', body:'Choose five words from a text that seem important or unexpected. For each one, write a sentence explaining what effect it creates and what the writer might have written instead.', tags:['language','tone'], modal:'<p>Word choice is the most visible site of a writer\'s craft — and their attitude.</p><ol><li>Read the text once.</li><li>Choose five words that seem <strong>important, unusual, or revealing</strong>.</li><li>For each word, write:<ul><li>What the word <em>denotes</em> (its basic meaning).</li><li>What the word <em>connotes</em> (what it implies or feels like).</li><li>What alternative word the writer could have used — and what would be different.</li></ul></li></ol><p>The gap between the word chosen and the word that could have been chosen is where a writer\'s perspective lives.</p>' },
+    { type:'Structure', title:'Structural Map', body:'After reading, draw the shape of the text: where does it begin, develop, turn, and end? Label each section with its function. Then ask: is this the best possible arrangement?', tags:['structure','organisation'], modal:'<p>Structure is argument made visible. Examining it reveals the choices the writer made — and the ones they didn\'t.</p><ol><li>Read the text in full.</li><li>Divide it into sections by function: introduction, development, turn, conclusion.</li><li>For each section, ask: <strong>what work does this section do? Why is it here, in this position?</strong></li><li>Now ask: <strong>could the sections be reordered? What would be gained or lost?</strong></li></ol><p>If the structure seems inevitable, the writer has done their job. If it seems arbitrary, the argument may be too.</p>' }
+  ],
+  4: [
+    { type:'Bias', title:'The Perspective Audit', body:'Identify the writer\'s perspective. Then name one thing it allows them to see clearly — and one thing it prevents them from seeing. Write a paragraph on each.', tags:['bias','perspective'], modal:'<p>Every perspective is both an insight and a limitation. The critical reader accounts for both.</p><ol><li>Read the text and identify the writer\'s position: their values, affiliations, and assumptions.</li><li>Write a paragraph on: <strong>What does this perspective allow the writer to see?</strong> What does their position give them access to — knowledge, experience, insight?</li><li>Write a paragraph on: <strong>What does this perspective prevent the writer from seeing?</strong> What is invisible from this vantage point?</li></ol><p>Neither paragraph is a criticism. Both are observations about the nature of any situated perspective.</p>' },
+    { type:'Evidence', title:'The Evidence Challenge', body:'Take any three pieces of evidence from a text. For each one, write two sentences: one accepting it as adequate, one challenging it as insufficient. Then decide which is stronger.', tags:['evidence','evaluation'], modal:'<p>Evidence is only as good as its relationship to the claim it supports.</p><ol><li>Choose three pieces of evidence from the text (a statistic, a quotation, an example).</li><li>For each one, write:<ul><li><strong>The case for:</strong> Why this evidence is sufficient and relevant to the claim.</li><li><strong>The case against:</strong> Why this evidence is insufficient, unrepresentative, or misapplied.</li></ul></li><li>After writing both, decide: which case is stronger? And what does the writer need to do to close the gap?</li></ol>' },
+    { type:'Counter-argument', title:'Write the Rebuttal', body:'Write the strongest possible argument against the central claim of a text you have just read. Then return to the text and ask: does the writer address this? Should they?', tags:['counter-argument','evaluation'], modal:'<p>A text that ignores its strongest objections is a weaker argument. Find the objection first.</p><ol><li>Identify the text\'s central claim.</li><li>Write the <strong>strongest possible counter-argument</strong> — not a straw man, but the most serious challenge to the position.</li><li>Return to the text. Does the writer acknowledge this objection?<ul><li>If yes: how do they address it? Is their response adequate?</li><li>If no: why not? Is the omission a flaw in the argument, or is there a good reason?</li></ul></li></ol><p>The strength of an argument is often most visible in what it fails to address.</p>' }
+  ],
+  5: [
+    { type:'Intertextual', title:'Two Texts in Dialogue', body:'Read two texts on the same topic or question. Write a synthesis that does not merely report what each says — but uses them together to advance a position of your own.', tags:['synthesis','intertextual'], modal:'<p>Scholarly reading is always reading in relation. No text stands alone.</p><ol><li>Read both texts with care.</li><li>Identify: <strong>where do they agree? Where do they disagree? Where do they talk past each other?</strong></li><li>Write a synthesis paragraph that:<ul><li>Begins with a position that neither text alone expresses.</li><li>Uses both texts as evidence for that position.</li><li>Acknowledges where they conflict and explains how you navigate the conflict.</li></ul></li></ol><p>The synthesis is not a summary of two sources. It is a new argument that could not exist without them.</p>' },
+    { type:'Ideological', title:'Reading Against the Grain', body:'Choose a text that presents its argument as natural, obvious, or neutral. Read it against the grain: identify what it takes for granted, whose interests those assumptions serve, and what it cannot say.', tags:['ideology','critical reading'], modal:'<p>The most powerful texts are often those that do not seem to be arguing at all.</p><ol><li>Choose a text — a news article, an institutional document, a textbook — that presents itself as neutral or factual.</li><li>Ask: <strong>what does this text treat as natural, obvious, or beyond question?</strong></li><li>Ask: <strong>whose interests are served by that framing?</strong></li><li>Ask: <strong>what cannot be said within this text\'s framework — and why?</strong></li><li>Write a paragraph that makes the ideology of the text visible.</li></ol>' },
+    { type:'Scholarly', title:'The Gap Analysis', body:'After reading a scholarly argument, write three sentences on what the argument opens but cannot close — and what that suggests a fuller account would need to include.', tags:['evaluation','scholarly reading'], modal:'<p>The most productive scholarly reading leaves you with more questions than you arrived with — but better ones.</p><p>After reading a scholarly text closely, write answers to these three questions:</p><ol><li><strong>What does this argument achieve?</strong> What does it explain that was previously unclear?</li><li><strong>What does this argument open but not close?</strong> What questions does it raise without resolving?</li><li><strong>What would a fuller account need?</strong> What evidence, perspective, or theoretical framework would the argument need to incorporate to be more complete?</li></ol><p>The gap between what an argument accomplishes and what it leaves unresolved is where the next argument begins.</p>' }
+  ]
+};
+
+// ════════════════════════════════════════════
+// STAGE STATE
+// ════════════════════════════════════════════
+let currentStage = 1;
+
+function setStage(n) {
+  currentStage = n;
+  document.querySelectorAll('.stage-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.stage-btn[data-s="${n}"]`).classList.add('active');
+  const d = HERO_DATA[n];
+  document.getElementById('heroEyebrow').textContent = d.eyebrow;
+  document.getElementById('heroSub').textContent = d.sub;
+  document.getElementById('heroPrinciple').textContent = d.principle;
+  document.querySelectorAll('.spine-node').forEach((node, i) => {
+    node.classList.toggle('lit', i < n);
+  });
+  renderActiveSkillPanel();
+  renderChecklists();
+  renderPhrases();
+  renderActivities();
+  const accent = ['var(--accent1)','var(--accent2)','var(--accent3)','var(--accent4)','var(--accent5)'][n-1];
+  document.querySelector(':root').style.setProperty('--sc', accent);
+}
+
+// ════════════════════════════════════════════
+// FRAMEWORK
+// ════════════════════════════════════════════
+function buildFramework() {
+  const container = document.getElementById('stageCardList');
+  container.innerHTML = FRAMEWORK.map((f, i) => `
+    <div class="stage-item ${f.sClass}" id="stage-item-${i}">
+      <div class="stage-card" id="stage-card-${i}" onclick="toggleStageCard(${i})">
+        <div class="stage-header">
+          <span class="stage-num">${f.num}</span>
+          <span class="stage-badge">${f.badge}</span>
+        </div>
+        <div class="stage-title-el">${f.name}</div>
+        <div class="stage-meta">${f.meta}</div>
+        <div class="stage-desc" id="stage-desc-${i}">${f.desc[1]}</div>
+        <div class="stage-tags">${f.tags.map(t => `<span class="skill-tag">${t}</span>`).join('')}</div>
+        <div class="stage-expand">
+          <div class="expand-item"><h4>Focus</h4><p id="stage-focus-${i}">${f.focus[1]}</p></div>
+          <div class="expand-item"><h4>Success looks like</h4><p id="stage-success-${i}">${f.success[1]}</p></div>
+          <div class="expand-item"><h4>Challenge</h4><p id="stage-challenge-${i}">${f.challenge[1]}</p></div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function toggleStageCard(i) {
+  const card = document.getElementById('stage-card-' + i);
+  const isActive = card.classList.toggle('active');
+  const node = document.getElementById('sn' + i);
+  if (node) node.classList.toggle('lit', isActive);
+  if (isActive) {
+    const f = FRAMEWORK[i];
+    const s = currentStage;
+    document.getElementById(`stage-desc-${i}`).textContent = f.desc[s];
+    document.getElementById(`stage-focus-${i}`).textContent = f.focus[s];
+    document.getElementById(`stage-success-${i}`).textContent = f.success[s];
+    document.getElementById(`stage-challenge-${i}`).textContent = f.challenge[s];
+  }
+}
+
+// ════════════════════════════════════════════
+// SKILLS
+// ════════════════════════════════════════════
+const STAGE_COLOURS_CSS = ['var(--accent1)','var(--accent2)','var(--accent3)','var(--accent4)','var(--accent5)'];
+let activeSkillKey = 'main';
+
+function renderSkillPanel(key) {
+  activeSkillKey = key;
+  const skill = SKILLS[key];
+  let html = '<div class="skill-card-grid">';
+  skill.cards.forEach(card => {
+    html += '<div class="skill-card">';
+    html += '<div class="skill-progression">';
+    card.bodies.forEach((_, si) => {
+      const on = si < currentStage;
+      const col = STAGE_COLOURS_CSS[si];
+      html += `<div class="prog-dot ${on ? 'on' : ''}" style="${on ? `background:${col}` : ''}"></div>`;
+    });
+    html += '</div>';
+    html += `<div class="skill-card-stage" style="color:${STAGE_COLOURS_CSS[currentStage-1]}">Stage ${currentStage}</div>`;
+    html += `<h3>${card.title}</h3>`;
+    html += `<p>${card.bodies[currentStage - 1]}</p>`;
+    html += '</div>';
+  });
+  html += '</div>';
+
+  const container = document.getElementById('skillPanels');
+  let existing = document.getElementById('sp-' + key);
+  if (!existing) {
+    const div = document.createElement('div');
+    div.className = 'skill-panel';
+    div.id = 'sp-' + key;
+    container.appendChild(div);
+    existing = div;
+  }
+  existing.innerHTML = html;
+  container.querySelectorAll('.skill-panel').forEach(p => p.classList.remove('active'));
+  existing.classList.add('active');
+}
+
+function renderActiveSkillPanel() {
+  document.getElementById('skillPanels').innerHTML = '';
+  renderSkillPanel(activeSkillKey);
+}
+
+function switchSkill(key, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderSkillPanel(key);
+}
+
+// ════════════════════════════════════════════
+// CHECKLISTS
+// ════════════════════════════════════════════
+const checkState = {};
+
+function renderChecklists() {
+  const lists = CHECKLISTS[currentStage];
+  let html = '';
+  lists.forEach((cl, ci) => {
+    const total = cl.items.length;
+    const done = cl.items.filter((_, ii) => checkState[`${currentStage}-${ci}-${ii}`]).length;
+    const pct = Math.round((done / total) * 100);
+    const items = cl.items.map((item, ii) => {
+      const isDone = !!checkState[`${currentStage}-${ci}-${ii}`];
+      return `<div class="checklist-item${isDone ? ' checked' : ''}" onclick="toggleCheck(this,${currentStage},${ci},${ii})">
+        <div class="check-box">✓</div><div class="check-text">${item}</div>
+      </div>`;
+    }).join('');
+    html += `<div class="checklist-card">
+      <h3>${cl.title}</h3><div class="checklist-subtitle">${cl.sub}</div>
+      ${items}
+      <div class="checklist-progress">
+        <div class="progress-bar"><div class="progress-fill" id="pf-${ci}" style="width:${pct}%"></div></div>
+        <div class="progress-label" id="pl-${ci}">${done} / ${total}</div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('checklistGrid').innerHTML = html;
+}
+
+function toggleCheck(el, stage, ci, ii) {
+  const key = `${stage}-${ci}-${ii}`;
+  checkState[key] = el.classList.toggle('checked');
+  const lists = CHECKLISTS[stage];
+  const total = lists[ci].items.length;
+  const done = lists[ci].items.filter((_, x) => checkState[`${stage}-${ci}-${x}`]).length;
+  const pct = Math.round((done / total) * 100);
+  const pf = document.getElementById('pf-' + ci);
+  const pl = document.getElementById('pl-' + ci);
+  if (pf) pf.style.width = pct + '%';
+  if (pl) pl.textContent = `${done} / ${total}`;
+}
+
+// ════════════════════════════════════════════
+// RUBRIC
+// ════════════════════════════════════════════
+function selectRubric(key, btn) {
+  document.querySelectorAll('.rubric-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('rubricBody').innerHTML = RUBRICS[key]
+    .map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('');
+}
+
+// ════════════════════════════════════════════
+// PHRASES
+// ════════════════════════════════════════════
+function renderPhrases() {
+  document.getElementById('phrasesGrid').innerHTML = PHRASES[currentStage].map(g => `
+    <div class="phrase-group">
+      <h3>${g.title}</h3>
+      ${g.phrases.map(p => `<div class="phrase-item" onclick="copyPhrase(this,'${p.replace(/'/g, "\\'")}')">
+        <div class="phrase-text">${p}</div><div class="phrase-copy">copy</div>
+      </div>`).join('')}
+    </div>`).join('');
+}
+
+function copyPhrase(el, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    el.classList.add('copied');
+    el.querySelector('.phrase-copy').textContent = '✓';
+    showToast('Copied to clipboard');
+    setTimeout(() => { el.classList.remove('copied'); el.querySelector('.phrase-copy').textContent = 'copy'; }, 2000);
+  });
+}
+
+// ════════════════════════════════════════════
+// ACTIVITIES
+// ════════════════════════════════════════════
+function renderActivities() {
+  document.getElementById('activitiesGrid').innerHTML = ACTIVITIES[currentStage].map((a, i) => `
+    <div class="activity-card" onclick="openActivity(${currentStage},${i})">
+      <div class="activity-type">${a.type}</div>
+      <h3>${a.title}</h3>
+      <p>${a.body}</p>
+      <div class="activity-meta">${a.tags.map(t => `<span class="activity-tag">${t}</span>`).join('')}</div>
+    </div>`).join('');
+}
+
+function openActivity(stage, idx) {
+  const a = ACTIVITIES[stage][idx];
+  document.getElementById('modalInner').innerHTML = `
+    <div class="modal-eyebrow">${a.type}</div>
+    <h2>${a.title}</h2>
+    <div class="modal-body">${a.modal}</div>`;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (!e || e.target === document.getElementById('modalOverlay'))
+    document.getElementById('modalOverlay').classList.remove('open');
+}
+
+// ════════════════════════════════════════════
+// TIMER
+// ════════════════════════════════════════════
+let timerDuration = 600, timerRemaining = 600, timerInterval = null, timerRunning = false;
+const CIRCUM = 2 * Math.PI * 44;
+
+function setTimer(s, btn) {
+  if (timerRunning) return;
+  document.querySelectorAll('.t-preset').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  timerDuration = s; timerRemaining = s;
+  updateTimerDisplay(); updateArc(1);
+}
+function timerToggle() {
+  if (timerRunning) {
+    clearInterval(timerInterval); timerRunning = false;
+    document.getElementById('timerStartBtn').textContent = 'Resume';
+    document.getElementById('timerLbl').textContent = 'Paused';
+  } else {
+    if (timerRemaining <= 0) { timerReset(); return; }
+    timerRunning = true;
+    document.getElementById('timerStartBtn').textContent = 'Pause';
+    document.getElementById('timerLbl').textContent = 'Running';
+    timerInterval = setInterval(() => {
+      timerRemaining--;
+      updateTimerDisplay(); updateArc(timerRemaining / timerDuration);
+      if (timerRemaining <= 0) {
+        clearInterval(timerInterval); timerRunning = false;
+        document.getElementById('timerStartBtn').textContent = 'Start';
+        document.getElementById('timerLbl').textContent = 'Done';
+        showToast('Time\'s up');
+      }
+    }, 1000);
+  }
+}
+function timerReset() {
+  clearInterval(timerInterval); timerRunning = false;
+  timerRemaining = timerDuration;
+  updateTimerDisplay(); updateArc(1);
+  document.getElementById('timerStartBtn').textContent = 'Start';
+  document.getElementById('timerLbl').textContent = 'Ready';
+}
+function updateTimerDisplay() {
+  const m = Math.floor(timerRemaining / 60), s = timerRemaining % 60;
+  document.getElementById('timerDisp').textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+function updateArc(ratio) {
+  document.getElementById('arcProg').style.strokeDashoffset = CIRCUM * (1 - ratio);
+}
+
+// ════════════════════════════════════════════
+// TOAST
+// ════════════════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ════════════════════════════════════════════
+// CANVAS BACKGROUND — geometric grid
+// ════════════════════════════════════════════
+(function () {
+  const c = document.getElementById('canvas-bg'), ctx = c.getContext('2d');
+  let pts = [];
+
+  function resize() {
+    c.width = innerWidth; c.height = innerHeight;
+    pts = [];
+    const cols = Math.ceil(c.width / 90) + 1;
+    const rows = Math.ceil(c.height / 90) + 1;
+    for (let r = 0; r < rows; r++) {
+      for (let col = 0; col < cols; col++) {
+        pts.push({
+          bx: col * 90, by: r * 90,
+          ox: (Math.random() - 0.5) * 28,
+          oy: (Math.random() - 0.5) * 28,
+          ph: Math.random() * Math.PI * 2,
+          sp: 0.0004 + Math.random() * 0.0004
+        });
+      }
+    }
+  }
+
+  function draw(t) {
+    ctx.clearRect(0, 0, c.width, c.height);
+    ctx.strokeStyle = 'rgba(180,200,220,0.06)';
+    ctx.lineWidth = 0.8;
+    const cols = Math.ceil(c.width / 90) + 1;
+    const rows = Math.ceil(c.height / 90) + 1;
+
+    for (let r = 0; r < rows - 1; r++) {
+      for (let col = 0; col < cols - 1; col++) {
+        const i = r * cols + col;
+        if (i >= pts.length) continue;
+        const p = pts[i];
+        const x = p.bx + p.ox * Math.sin(t * p.sp + p.ph);
+        const y = p.by + p.oy * Math.cos(t * p.sp + p.ph * 1.3);
+        const pr = pts[i + 1];
+        if (pr) {
+          const xr = pr.bx + pr.ox * Math.sin(t * pr.sp + pr.ph);
+          const yr = pr.by + pr.oy * Math.cos(t * pr.sp + pr.ph * 1.3);
+          ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(xr, yr); ctx.stroke();
+        }
+        const pb = pts[i + cols];
+        if (pb) {
+          const xb = pb.bx + pb.ox * Math.sin(t * pb.sp + pb.ph);
+          const yb = pb.by + pb.oy * Math.cos(t * pb.sp + pb.ph * 1.3);
+          ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(xb, yb); ctx.stroke();
+        }
+        ctx.beginPath();
+        ctx.arc(x, y, 0.9, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(200,210,230,0.18)';
+        ctx.fill();
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  requestAnimationFrame(draw);
+})();
+
+// ════════════════════════════════════════════
+// REVEAL ON SCROLL
+// ════════════════════════════════════════════
+const revObs = new IntersectionObserver(entries => entries.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); }
+}), { threshold: 0.06 });
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════
+buildFramework();
+renderSkillPanel('main');
+renderChecklists();
+selectRubric('s3', document.querySelector('.rubric-btn.active'));
+renderPhrases();
+renderActivities();
+updateTimerDisplay();
+updateArc(1);
+</script>
+</body>
+</html>
